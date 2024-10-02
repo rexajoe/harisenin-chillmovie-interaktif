@@ -1,11 +1,15 @@
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 
-const CustomButton = ({ label, icon, className = "", to }) => {
+const CustomButton = ({ label, icon, className = "", to, onClick }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(to);
+    if (to) {
+      navigate(to);
+    } if (onClick) {
+      onClick();
+    }
   };
 
   return (
@@ -16,8 +20,8 @@ const CustomButton = ({ label, icon, className = "", to }) => {
       {icon && (
         <img
           src={icon}
-          alt="Icon"
-          className="absolute left-[50px] sm:left-[65px] md:left-[75px] lg:left-[100px] transform -translate-y-[-5px] w-4 h-4"
+          alt={label || "Icon"} // Gunakan label sebagai fallback untuk alt text
+          className="absolute left-[50px] sm:left-[65px] md:left-[75px] lg:left-[100px] transform -translate-y-1 w-4 h-4"
         />
       )}
       <span>{label}</span>

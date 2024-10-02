@@ -1,11 +1,48 @@
+import React, { useState } from "react";
 import CustomButton from "./components/CustomButton";
 import CustomInput from "./components/CustomInput";
 import LogoBrand from "./components/LogoBrand";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import bgImageDaftar from "../src/assets/background-daftar.jpeg";
 import googleLogoDaftar from "./assets/google-logo.png";
 import eye from "./assets/eye.png";
+
 const RegisterPage = () => {
+  // State untuk username, password, confirm password, dan error
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+
+  // Fungsi untuk menangani proses pendaftaran
+  const handleRegister = () => {
+    if (!username) {
+      setError('Username tidak boleh kosong');
+      return;
+    }
+    if (!password) {
+      setError('Kata Sandi tidak boleh kosong');
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError('Kata Sandi tidak sama');
+      return;
+    }
+
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    const userExists = users.find((user) => user.username === username);
+    if (userExists) {
+      setError('Username sudah terdaftar')
+      return;
+    }
+
+    users.push({username, password});
+    localStorage.setItem('users', JSON.stringify(users));
+    navigate('/beranda');
+
+  };
+
   return (
     <div
       className="flex items-center justify-center min-h-screen bg-cover bg-center"
@@ -19,20 +56,44 @@ const RegisterPage = () => {
             <h2 className="text-white mt-2 text-3xl">Daftar</h2>
             <p className="text-white text-sm mt-1">Selamat Datang!</p>
           </div>
-          <label className="text-white text-lg">Username</label>
-          <CustomInput className="mb-5" placeholder="Masukkan username" />
+          
+          {/* Menampilkan pesan error jika ada */}
+          {error && <p className="text-red-500 text-center text-lg">{error}</p>}
 
+          {/* Input untuk Username */}
+          <label className="text-white text-lg">Username</label>
+          <CustomInput 
+            className="mb-5" 
+            placeholder="Masukkan username" 
+            type="text" 
+            value={username} 
+            onChange={(e) => setUsername(e.target.value)} 
+          />
+
+          {/* Input untuk Kata Sandi */}
           <label className="text-white text-lg">Kata Sandi</label>
           <div className="relative mb-4">
-            <CustomInput className="mb-2" placeholder="Masukkan kata sandi" />
+            <CustomInput 
+              className="mb-2" 
+              placeholder="Masukkan kata sandi" 
+              type="password" 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)} 
+            />
             <span className="absolute right-5 top-6 transform -translate-y-1/2 cursor-pointer w-5 h-4">
               <img src={eye} alt="" />
             </span>
           </div>
 
+          {/* Input untuk Konfirmasi Kata Sandi */}
           <label className="text-white text-lg">Konfirmasi Kata Sandi</label>
           <div className="relative mb-4">
-            <CustomInput placeholder="Masukkan kata sandi" />
+            <CustomInput 
+              placeholder="Masukkan kata sandi" 
+              type="password" 
+              value={confirmPassword} 
+              onChange={(e) => setConfirmPassword(e.target.value)} 
+            />
             <span className="absolute right-5 top-6 transform -translate-y-1/2 cursor-pointer w-5 h-4">
               <img src={eye} alt="" />
             </span>
@@ -46,16 +107,19 @@ const RegisterPage = () => {
               Masuk
             </Link>
           </div>
-          {/*button bawah*/}
 
+          {/* Tombol untuk Register */}
           <CustomButton
-            className="bg-opacity-70, text-center mb-3"
+            className="bg-opacity-70 text-center mb-3"
             label="Masuk"
-            to="/beranda"
+            onClick={handleRegister}
           />
+
           <p className="text-center text-[#9D9EA1] mb-2">Atau</p>
+
+          {/* Tombol Daftar dengan Google */}
           <CustomButton
-            className="bg-opacity-70, text-center"
+            className="bg-opacity-70 text-center"
             icon={googleLogoDaftar}
             label="Daftar dengan Google"
           />

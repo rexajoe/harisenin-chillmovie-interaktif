@@ -1,11 +1,32 @@
+import { useState } from "react";
 import CustomButton from "./components/CustomButton";
 import CustomInput from "./components/CustomInput";
 import LogoBrand from "./components/LogoBrand";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import bgImageLogin from "./assets/background-login.jpeg";
 import eye from "./assets/eye.png";
 import googleLogo from "./assets/google-logo.png";
+
 const LoginPage = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    const user = users.find(
+      (u) => u.username === username && u.password === password
+    );
+
+    if (user) {
+      navigate('/beranda');
+    } else {
+      setError('Username / Password tidak sesuai')
+    }
+  }
+
+
   return (
     <div
       className="flex items-center justify-center min-h-screen bg-cover bg-center"
@@ -29,16 +50,18 @@ const LoginPage = () => {
             type="text"
             className="mb-5"
             placeholder="Masukkan username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
           />
           {/*Kata Sandi Section*/}
           <label className="text-white text-lg">Kata Sandi</label>
           <div className="relative mb-4">
-            <CustomInput type="password" placeholder="Masukkan kata sandi" />
+            <CustomInput type="password" placeholder="Masukkan kata sandi" value={password} onChange={(e) => setPassword(e.target.value)} />
             <span className="absolute right-5 top-6 transform -translate-y-1/2 cursor-pointer w-5 h-4">
               <img src={eye} alt="" />
             </span>
           </div>
-
+            {error && <p className="text-red-500 text-center mb-4 text-lg">{error}</p>}
           <div className="flex justify-between text-sm mb-4">
             <div href="#register" className="text-[#9D9EA1]">
               Belum punya akun?{" "}
@@ -54,7 +77,7 @@ const LoginPage = () => {
           <CustomButton
             className="bg-opacity-70, text-center, mb-3"
             label="Masuk"
-            to="/beranda"
+            onClick={handleLogin}
           />
           <p className="text-center text-[#9D9EA1] mb-2">Atau</p>
           <CustomButton
