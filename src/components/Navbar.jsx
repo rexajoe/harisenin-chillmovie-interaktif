@@ -22,7 +22,7 @@ const Navbar = () => {
         <LogoBrand className="ml-[5vw]" />
         <li className="text-white">Series</li>
         <li className="text-white">Film</li>
-        <li className="text-white">Daftar Saya</li>
+        <li className="text-white"> <Link to='/daftar-saya'>Daftar Saya</Link></li>
       </ul>
       <ul className="flex justify-around gap-3 items-center mr-[5vw]">
         <li className="w-7 h-7 sm:w-10 sm:h-10">
