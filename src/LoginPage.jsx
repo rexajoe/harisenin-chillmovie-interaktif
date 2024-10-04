@@ -4,7 +4,9 @@ import CustomInput from "./components/CustomInput";
 import LogoBrand from "./components/LogoBrand";
 import { Link, useNavigate } from "react-router-dom";
 import bgImageLogin from "./assets/background-login.jpeg";
-import eye from "./assets/eye.png";
+import eyeClose from "./assets/eye.png";
+import eyeOpen from "./assets/eye-open.png"
+
 import googleLogo from "./assets/google-logo.png";
 
 const LoginPage = () => {
@@ -12,6 +14,10 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePasswordVisibility = () => {
+      setShowPassword((prevState) => !prevState);
+    };
 
   const handleLogin = () => {
     const users = JSON.parse(localStorage.getItem('users')) || [];
@@ -56,9 +62,9 @@ const LoginPage = () => {
           {/*Kata Sandi Section*/}
           <label className="text-white text-lg">Kata Sandi</label>
           <div className="relative mb-4">
-            <CustomInput type="password" placeholder="Masukkan kata sandi" value={password} onChange={(e) => setPassword(e.target.value)} />
-            <span className="absolute right-5 top-6 transform -translate-y-1/2 cursor-pointer w-5 h-4">
-              <img src={eye} alt="" />
+            <CustomInput type={showPassword ? 'text' : 'password'} placeholder="Masukkan kata sandi" value={password} onChange={(e) => setPassword(e.target.value)}/>
+            <span className="absolute right-5 top-6 transform -translate-y-1/2 cursor-pointer w-5 h-4" onClick={togglePasswordVisibility}>
+              <img src={showPassword ? eyeOpen : eyeClose} alt={showPassword ? 'Hide Password' : 'Show Password'} />
             </span>
           </div>
             {error && <p className="text-red-500 text-center mb-4 text-lg">{error}</p>}

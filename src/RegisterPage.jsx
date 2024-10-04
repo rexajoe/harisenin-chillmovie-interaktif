@@ -5,7 +5,8 @@ import LogoBrand from "./components/LogoBrand";
 import { Link, useNavigate } from "react-router-dom";
 import bgImageDaftar from "../src/assets/background-daftar.jpeg";
 import googleLogoDaftar from "./assets/google-logo.png";
-import eye from "./assets/eye.png";
+import eyeClose from "./assets/eye.png";
+import eyeOpen from "./assets/eye-open.png";
 
 const RegisterPage = () => {
   // State untuk username, password, confirm password, dan error
@@ -14,6 +15,11 @@ const RegisterPage = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePasswordVisibility = () => {
+      setShowPassword((prevState) => !prevState);
+    };
+  
 
   // Fungsi untuk menangani proses pendaftaran
   const handleRegister = () => {
@@ -56,9 +62,6 @@ const RegisterPage = () => {
             <h2 className="text-white mt-2 text-3xl">Daftar</h2>
             <p className="text-white text-sm mt-1">Selamat Datang!</p>
           </div>
-          
-          {/* Menampilkan pesan error jika ada */}
-          {error && <p className="text-red-500 text-center text-lg">{error}</p>}
 
           {/* Input untuk Username */}
           <label className="text-white text-lg">Username</label>
@@ -76,12 +79,12 @@ const RegisterPage = () => {
             <CustomInput 
               className="mb-2" 
               placeholder="Masukkan kata sandi" 
-              type="password" 
+              type={showPassword ? 'text' : 'password'}
               value={password} 
               onChange={(e) => setPassword(e.target.value)} 
             />
-            <span className="absolute right-5 top-6 transform -translate-y-1/2 cursor-pointer w-5 h-4">
-              <img src={eye} alt="" />
+            <span className="absolute right-5 top-6 transform -translate-y-1/2 cursor-pointer w-5 h-4" onClick={togglePasswordVisibility}>
+              <img src={showPassword ? eyeOpen : eyeClose} alt={showPassword ? "Hide Password" : "Show Password"} />
             </span>
           </div>
 
@@ -90,16 +93,17 @@ const RegisterPage = () => {
           <div className="relative mb-4">
             <CustomInput 
               placeholder="Masukkan kata sandi" 
-              type="password" 
+              type={showPassword ? 'text' : 'password'}
               value={confirmPassword} 
               onChange={(e) => setConfirmPassword(e.target.value)} 
             />
-            <span className="absolute right-5 top-6 transform -translate-y-1/2 cursor-pointer w-5 h-4">
-              <img src={eye} alt="" />
+            <span className="absolute right-5 top-6 transform -translate-y-1/2 cursor-pointer w-5 h-4" onClick={togglePasswordVisibility}>
+              <img src={showPassword ? eyeOpen : eyeClose} alt={showPassword ? 'Hide Password' : 'Show Password'} />
             </span>
           </div>
-
-          <div className="text-sm mb-4">
+          {/* Menampilkan pesan error jika ada */}
+          {error && <p className="text-red-500 text-center text-lg">{error}</p>}
+          <div className="text-sm mb-4 mt-4">
             <a href="#login" className="text-[#9D9EA1]">
               Sudah punya akun?{" "}
             </a>
